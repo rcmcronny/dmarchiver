@@ -3,52 +3,47 @@
 ### DMARC report attachments
 #-----------------------------------
 
-from imaplib import IMAP4
 import email
-import re,sys
-import yaml
+import sys, re
+from imaplib import IMAP4
+from include import function
+from include import decompress
 
-### Config
 
-config = "dmarchiver.conf"
 
-try:
- with open("config", 'r') as ymlfile:
- cfg = yaml.load(ymlfile)
- 
- imap_host       = cfg['imap']['scheme']
- imap_port       = cfg['imap']['ipamURL']
- imap_user       = cfg['imap']['apiPath']
- imap_pass       = cfg['imap']['user']
- imap_folder     = cfg['imap']['db']
- done_folder     = cfg['imap']['dbuser']
- use_tls         = cfg['connection']['use_tls']
- use_starttls    = cfg['connection']['use_starttls']
- allowed_content = cfg['content']['allowed']
- daemon_mode	 = cfg['process']['daemon']
- delay_interval  = cfg['process']['delay']
- 
-except Exception as e:
- print("Error: %s" % (e))
- sys.exit(1)
-		
-if( (use_tls == True) and (use_starttls == True):
-   print("'use_tls' and 'use_starttls' are mutually exclusive, please update your configuration")
-   sys.exit(1)
+def fetch_report_imap(imap_host, imap_port, imap_user, imap_pass, imap_folder, done_folder, use_starttls, use_tls):
 
-with IMAP4(imap_host, imap_port) as M:
-	M.debug = 3
+	print(imap_user, imap_pass)
 
-	if(use_starttls == True):
-		M.starttls
-	elif(use_tls == True):
-		#M.ssl
-		pass
-	else:
-		pass
+	if( (use_tls == True) and (use_starttls == True) ):
+		print("'use_tls' and 'use_starttls' are mutually exclusive, please update your configuration")
+		sys.exit(1)
 
-#	M.starttls()
-	M.login(imap_user, imap_pass)
+	try:
+		M = IMAP4(imap_host, imap_port)
+		#M.debug = 3
+
+		if(use_starttls == True):
+			M.starttls()
+		elif(use_tls == True):
+			#M.ssl
+			pass
+		else:
+			pass
+
+	except Exception as e:
+		print("Error: %s" % (e))
+		function.log(logfile,"ERR", "Error connecting to IMAP host: %s %s" % (imap_host, e))
+		sys.exit(1)
+
+	try:
+		M.login(imap_user, imap_pass)
+
+	except Exception as e:
+		print("Error authenticating against IMAP host: %s %s" % (imap_host, e))
+		function.log(logfile,"ERR", "Error authenticating against IMAP host: %s %s" % (imap_host, e))
+		M.close()
+		sys.exit(1)
 
 	try:
 		ret = M.select(done_folder)[0]
@@ -61,7 +56,7 @@ with IMAP4(imap_host, imap_port) as M:
 	M.select(imap_folder)
 
 	typ, msgnums = M.search(None, 'ALL')
-	print(typ, msgnums)
+	#print(typ, msgnums)
 
 	for num in msgnums[0].split():
 
@@ -70,39 +65,47 @@ with IMAP4(imap_host, imap_port) as M:
 
 		date		= 	re.search("Date:\s(\w*,?\s*\w*\s*\w*\s*\w*\s*\w*:\w*:\w*)", line)
 		if(date is not None):
-			print(date.group(1))
+			if(debug == True):
+				print(date.group(1))
 
 		typ, data = M.fetch(num, '(BODY[HEADER.FIELDS (SUBJECT)])')
 		line = (str(data[0][1]))
 
 		submitter     =	re.search("Submitter:\s(\w*\.\w*)", line)
 		if(submitter is not None):
-			print(submitter.group(1))
+			if(debug == True):
+				print(submitter.group(1))
 
 		report_id     =	re.search("Report-ID:\s(<?\w*\.?\w*>?)", line)
 		if(report_id is not None):
-			print(report_id.group(1))
+			if(debug == True):
+				print(report_id.group(1))
 
 		report_domain     =	re.search("Report domain:\s(\w*\.\w*)", line)
 		if(report_domain is not None):
-			print(report_domain.group(1))
+			if(debug == True):
+				print(report_domain.group(1))
 
 		typ, data = M.fetch(num, '(RFC822)')
-		print(data[0][1])
+		if(debug == True):
+			print(data[0][1])
 
 		mail = email.message_from_string(data[0][1].decode())
-		if(mail.is_multipart()):
-			print("MULTI")
-			for part in mail.walk():
-				ctype = part.get_content_type()
-				print(ctype)
-				if(ctype in allowed_content):
-					open(part.get_filename(), 'wb').write(part.get_payload(decode=True))
+		#if(mail.is_multipart()):
+		for part in mail.walk():
+			ctype = part.get_content_type()
+			print(ctype)
+			if(ctype in allowed_content):
+				fn = tmpdir + "/" + part.get_filename()
+				print(fn)
+				open(fn, 'wb').write(part.get_payload(decode=True))
+
+		decompress.compr_type(fn)
 
 		#M.copy(num, done_folder)
 		#M.store(num, '+FLAGS', '\\Deleted')
 
 
 
-	M.close()
-	M.logout()
+		#M.close()
+		#M.logout()

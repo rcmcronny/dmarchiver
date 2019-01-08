@@ -1,21 +1,23 @@
-#!/usr/bin/env python3
+#-----------------------------------
+### Parsing
+### DMARC report XML attachments
+#-----------------------------------
 
 import xml.etree.ElementTree as ET
-from datetime import datetime
 
 class DMARCReport():
 
 	def __init__(self):
-		self.submitorg          = ""
-		self.submitmail         = ""
-		self.repid              = ""
-		self.begindate          = ""
-		self.enddate            = ""
-		self.policy_pub         = {}
-		self.policy_eval        = {}
+		self.submitorg		= ""
+		self.submitmail		= ""
+		self.repid			= ""
+		self.begindate		= ""
+		self.enddate		= ""
+		self.policy_pub		= {}
+		self.policy_eval	= {}
 		self.identifiers	= {}
 		self.auth_results	= {}
-		self.record	        = {}
+		self.record			= {}
 
 
 def parseXMLfromFile(xmlfile):
@@ -38,6 +40,7 @@ def parseXMLfromFile(xmlfile):
 							DMARC.begindate = key.text
 						elif(key.tag == "end"):
 							DMARC.enddate = key.text
+
 		elif(child.tag == "policy_published"):
 			for sub in child:
 				if(sub.tag == "domain"):
@@ -67,7 +70,6 @@ def parseXMLfromFile(xmlfile):
 									DMARC.policy_eval.update( {'dkim' : tag.text} )
 								if(tag.tag == "spf"):
 									DMARC.policy_eval.update( {'spf' : tag.text} )
-
 						DMARC.record.update( {'policy_eval': DMARC.policy_eval} )
 
 				elif(sub.tag == "identifiers"):
@@ -103,28 +105,7 @@ def parseXMLfromFile(xmlfile):
 								elif(tag.tag == "result"):
 									spf.update( {'result' : tag.text} )
 									DMARC.auth_results.update(spf)
+
 					DMARC.record.update( {'auth_results': DMARC.auth_results} )
 
 	return(DMARC)
-
-
-
-
-current_report = parseXMLfromFile("g.xml")
-
-
-#print(current_report.submitorg)
-#print(current_report.submitmail)
-#print(current_report.repdomain)
-#print(current_report.repid)
-#print(current_report.begindate)
-#print(current_report.enddate)
-
-#print(datetime.utcfromtimestamp(int(current_report.begindate)).strftime('%Y-%m-%d %H:%M:%S'))
-#print(datetime.utcfromtimestamp(int(current_report.enddate)).strftime('%Y-%m-%d %H:%M:%S'))
-
-print(current_report.record)
-
-
-
-
