@@ -102,10 +102,8 @@ def fetch_report_imap(imap_host, imap_port, imap_user, imap_pass, imap_folder, d
 
 		decompress.compr_type(fn)
 
-		#M.copy(num, done_folder)
-		#M.store(num, '+FLAGS', '\\Deleted')
+		M.copy(num, done_folder)
+		M.store(num, '+FLAGS', '\\Deleted')
 
-
-
-		#M.close()
-		#M.logout()
+	M.close()
+	M.logout()
