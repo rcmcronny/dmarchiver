@@ -22,6 +22,17 @@ from include import xmlparse
 config = "/etc/dmarchiver.conf"
 
 try:
+	fh = open(config, 'r')
+except FileNotFoundError:
+	try:
+		config = os.path.dirname(os.path.realpath(__file__)) + "/dmarchiver.conf"
+		fh = open(config, 'r')
+	except FileNotFoundError:
+		print("No Config file found, Aborting")
+		sys.exit(1)
+	
+
+try:
 	with open(config, 'r') as ymlfile:
 		cfg = yaml.load(ymlfile)
 
