@@ -90,18 +90,33 @@ for fn in os.listdir(tmpdir):
 		data = json.loads(json.dumps(current_report.policy_pub))
 		
 		repdomain	= data['repdomain']
-		adkim 		= data['adkim']
-		aspf		= data['aspf']
-		p			= data['p']
-		
+		try:
+			adkim 	= data['adkim']
+		except:
+			adkim	= "N/A"
+
+		try:
+			aspf	= data['aspf']
+		except:
+			aspf	= "N/A"
+
+		try:
+			p		= data['p']
+		except:
+			p		= "N/A"
+			
 		try:
 			sp		= data['sp']
 		except:
 			sp		= "N/A"
-		pct			= data['pct']
-		
+
+		try:
+			pct		= data['pct']
+		except:
+			pct		= "N/A"
+
 		data = json.loads(json.dumps(current_report.policy_eval))
-		
+
 		disposition	= data['disposition']
 		dkim		= data['dkim']
 		spf			= data['spf']
