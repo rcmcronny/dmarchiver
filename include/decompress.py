@@ -20,11 +20,13 @@ def compr_type(filename):
 			content = zf.read()
 			with open(newfile, 'wb') as newf:
 				newf.write(content)
+			os.remove(filename)
 		# ZIP?
 		elif(zipfile.is_zipfile(filename)):
 				print("File is zip compressed")
 				with zipfile.ZipFile(filename) as zf:
 					zf.extractall(tmpdir)
+				os.remove(filename)
 		else:
 			log(ERR, "Unsupported compression method, cannot decompress archive")
 			sys.exit(1)

@@ -11,8 +11,11 @@ class DMARCReport():
 		self.submitorg		= ""
 		self.submitmail		= ""
 		self.repid			= ""
+		self.repdomain		= ""
 		self.begindate		= ""
 		self.enddate		= ""
+		self.sip			= ""
+		self.cnt			= ""
 		self.policy_pub		= {}
 		self.policy_eval	= {}
 		self.identifiers	= {}
@@ -44,6 +47,7 @@ def parseXMLfromFile(xmlfile):
 		elif(child.tag == "policy_published"):
 			for sub in child:
 				if(sub.tag == "domain"):
+					DMARC.repdomain = sub.text
 					DMARC.policy_pub.update( {'repdomain' : sub.text } )
 				elif(sub.tag == "adkim"):
 					DMARC.policy_pub.update( {'adkim' : sub.text } )
@@ -51,16 +55,21 @@ def parseXMLfromFile(xmlfile):
 					DMARC.policy_pub.update( {'aspf' : sub.text  } )
 				elif(sub.tag == "p"):
 					DMARC.policy_pub.update( {'p': sub.text } )
+				elif(sub.tag == "sp"):
+					DMARC.policy_pub.update( {'sp': sub.text } )
 				elif(sub.tag == "pct"):
 					DMARC.policy_pub.update( {'pct': sub.text } )
-
+			DMARC.record.update( {'policy_pub': DMARC.policy_pub } )
+			
 		elif(child.tag == "record"):
 			for sub in child:
 				if(sub.tag == "row"):
 					for key in sub:
 						if(key.tag == "source_ip"):
+							DMARC.sip = key.text
 							DMARC.record.update( {'source_ip' : key.text})
 						if(key.tag == "count"):
+							DMARC.cnt = key.text
 							DMARC.record.update( {'count' : key.text})
 						if(key.tag == "policy_evaluated"):
 							for tag in key:
