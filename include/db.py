@@ -27,8 +27,8 @@ def get_last_row_id(conn):
 		
 def insert_data(conn, values):
 	
-	sql = '''INSERT INTO dmarc_reports(ID, org_name, org_mail, report_id, begin_date, end_date, pub_domain, pub_adkim, pub_aspf, pub_p, pub_sp, pub_pct, sip, count, eval_disp, eval_dkim, eval_spf, header_from, auth_dkim_dom, auth_dkim_res, auth_spf_dom, auth_spf_res)
-			  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+	sql = '''INSERT INTO dmarc_reports(ID, org_name, org_mail, report_id, begin_date, end_date, pub_domain, pub_adkim, pub_aspf, pub_p, pub_sp, pub_pct, pub_fo, sip, count, eval_disp, eval_dkim,eval_spf, header_from, auth_dkim_dom, auth_dkim_res, auth_spf_dom, auth_spf_res)
+			  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
 			  
 	cur = conn.cursor()
 	cur.execute(sql, values)

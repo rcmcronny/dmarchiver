@@ -90,6 +90,7 @@ for fn in os.listdir(tmpdir):
 		data = json.loads(json.dumps(current_report.policy_pub))
 		
 		repdomain	= data['repdomain']
+
 		try:
 			adkim 	= data['adkim']
 		except:
@@ -114,6 +115,11 @@ for fn in os.listdir(tmpdir):
 			pct		= data['pct']
 		except:
 			pct		= "N/A"
+
+		try:
+			fo		= data['fo']
+		except:
+			fo		= "N/A"
 
 		data = json.loads(json.dumps(current_report.policy_eval))
 
@@ -157,7 +163,7 @@ for fn in os.listdir(tmpdir):
 		
 		insert_data = (ID, current_report.submitorg, current_report.submitmail, current_report.repid, 
 					   current_report.begindate, current_report.enddate, repdomain, adkim, aspf, p, sp, pct,
-					   current_report.sip, current_report.cnt, disposition, dkim, spf, header_from,
+					   fo, current_report.sip, current_report.cnt, disposition, dkim, spf, header_from,
 					   auth_dkim_dom, auth_dkim_res, auth_spf_dom, auth_spf_res );
 		
 		try:

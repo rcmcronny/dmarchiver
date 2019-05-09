@@ -59,8 +59,10 @@ def parseXMLfromFile(xmlfile):
 					DMARC.policy_pub.update( {'sp': sub.text } )
 				elif(sub.tag == "pct"):
 					DMARC.policy_pub.update( {'pct': sub.text } )
+				elif(sub.tag == "fo"):
+					DMARC.policy_pub.update( {'fo': sub.text } )
 			DMARC.record.update( {'policy_pub': DMARC.policy_pub } )
-			
+
 		elif(child.tag == "record"):
 			for sub in child:
 				if(sub.tag == "row"):
