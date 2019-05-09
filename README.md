@@ -35,7 +35,7 @@ Future Releases
 		pub_p CHAR(20) NOT NULL,
 		pub_sp CHAR(20) NOT NULL,
 		pub_pct INT NOT NULL,
-		pub_fo  INT NOT NULL
+		pub_fo  INT NOT NULL,
 		sip CHAR(18) NOT NULL,
 		count INT NOT NULL,
 		eval_disp CHAR(10) NOT NULL,
