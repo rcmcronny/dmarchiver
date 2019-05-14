@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>{{ title }}</title>
+</head>
+
+<body>
+<h1>Reports by Submitter</h1>
+<script src="static/Chart.js-2.8.0/dist/Chart.min.js"></script>
+
+<div id="canvasWrapper" style="position: relative; height: 200px;">
+    <canvas id="submitters" width="300px" height="200px"></canvas>
+</div>
+
+<div id="canvasWrapper" style="position: relative; height: 200px;">
+    <canvas id="pub_domain" width="300px" height="200px"></canvas>
+</div>
+
+
+
+    <script>
+
+        var subOrgPieData = {
+		labels: {{labels|tojson|safe}},
+		datasets: [{
+				data: [{{values}}],
+				backgroundColor: [
+					{%- for item in colors %}
+					"{{ item }}",
+					{%- endfor %}
+				]
+			}]
+
+	};
+
+        var pubDomPieData = {
+		labels: {{pub_domain|tojson|safe}},
+		datasets: [{
+				data: [{{pub_domain_count}}],
+				backgroundColor: [
+					{%- for item in colors %}
+					"{{ item }}",
+					{%- endfor %}
+				]
+			}]
+
+	};
+
+      var submitters = document.getElementById("submitters").getContext("2d");
+      var pub_domain = document.getElementById("pub_domain").getContext("2d");
+
+      // draw pie chart
+      var subOrgPieChart = new Chart(submitters, {
+	type: 'pie',
+	data: subOrgPieData,
+        options: {
+		maintainAspectRatio: false,
+		responsive: true
+        }
+      });	
+
+      // draw pie chart
+      var pubDomPieChart = new Chart(pub_domain, {
+	type: 'pie',
+	data: pubDomPieData,
+        options: {
+		maintainAspectRatio: false,
+		responsive: true
+        }
+      });	
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+
+</html>
+
+
