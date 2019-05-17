@@ -48,3 +48,7 @@ Future Releases
 		auth_spf_res CHAR(10) NOT NULL
 	);
 
+
+# web statistics
+
+Please note: dmarchiver uses Chart.js to generate and display dmarchiver's statistics.
