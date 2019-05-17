@@ -4,14 +4,15 @@
 #-----------------------------------
 
 import sqlite3
+import sys
 
 def connect_db(sqlitefile):
 	try:
 		conn = sqlite3.connect(sqlitefile)
 		return conn
-	except Error as e:
-		print("Error creating DB connection %s", e)
-		return None
+	except Exception as e:
+		print("Error creating DB connection:", e)
+		sys.exit(1)
 		
 def get_last_row_id(conn):
 	
