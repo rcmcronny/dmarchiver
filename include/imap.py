@@ -13,8 +13,6 @@ from include import decompress
 
 def fetch_report_imap(imap_host, imap_port, imap_user, imap_pass, imap_folder, done_folder, use_starttls, use_tls):
 
-	print(imap_user, imap_pass)
-
 	if( (use_tls == True) and (use_starttls == True) ):
 		print("'use_tls' and 'use_starttls' are mutually exclusive, please update your configuration")
 		sys.exit(1)
