@@ -34,7 +34,7 @@ except FileNotFoundError:
 
 try:
 	with open(config, 'r') as ymlfile:
-		cfg = yaml.load(ymlfile)
+		cfg = yaml.safe_load(ymlfile)
 
 		imap_host       = cfg['imap']['imap_host']
 		imap_port       = cfg['imap']['imap_port']
