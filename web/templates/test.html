@@ -6,11 +6,15 @@
 
 <body>
 <h1>Reports by Submitter</h1>
-<script src="static/Chart.js-2.8.0/dist/Chart.min.js"></script>
+<script src="{{ url_for('static', filename='Chart.min.js') }}"></script>
 
 <div id="canvasWrapper" style="position: relative; height: 200px;">
     <canvas id="submitters" width="300px" height="200px"></canvas>
 </div>
+
+<hr />
+
+<h1>Total reports by domain</h1>
 
 <div id="canvasWrapper" style="position: relative; height: 200px;">
     <canvas id="pub_domain" width="300px" height="200px"></canvas>

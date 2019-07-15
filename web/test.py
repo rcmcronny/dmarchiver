@@ -1,9 +1,10 @@
+import os
 import sqlite3
 import re
 from flask import Flask
 from flask import render_template
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.dirname(os.path.realpath(__file__)) + "/static")
 
 colors = [
     "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
@@ -11,7 +12,7 @@ colors = [
     "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
 
 
-DATABASE="dmarchiver.sqlite"
+DATABASE="/usr/local/bin/dmarchiver/dmarchiver.sqlite"
 
 @app.route("/")
 def hello():
