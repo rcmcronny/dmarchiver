@@ -51,4 +51,6 @@ Future Releases
 
 # web statistics
 
+![alt text](https://raw.githubusercontent.com/mischmeister/dmarchiver/master/screenshot_dmarchiver.png)
+
 Please note: dmarchiver uses Chart.js to generate and display dmarchiver's statistics.
