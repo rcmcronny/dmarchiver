@@ -2,7 +2,7 @@
 
 import builtins
 import json
-import os, re,sys
+import os,re,sqlite3,sys
 import yaml
 
 from datetime import datetime
