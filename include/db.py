@@ -13,7 +13,7 @@ import sys
 ### then create it
 #-----------------------------------
 
-if(!os.path.isfile(sqlitefile)):
+if not(os.path.isfile(sqlitefile)):
 	conn = sqlite3.connect(sqlitefile)
 	c = conn.cursor()
 	c.execute('''CREATE TABLE dmarc_reports (
